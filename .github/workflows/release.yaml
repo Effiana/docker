@@ -34,7 +34,7 @@ jobs:
               uses: docker/setup-buildx-action@v3
             - name: Set up Docker config.json
               run: |
-                  echo '${{ secrets.AUTH_JSON }}' > effiana/auth.json
+                  echo '${{ secrets.AUTH_JSON }}' > auth.json
               env:
                   AUTH_JSON: ${{ secrets.AUTH_JSON }}
             - name: Build and push
