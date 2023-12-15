@@ -41,7 +41,7 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   context: .
-                  file: php/php8.2-fpm/Dockerfile
+                  file: php/8.2-fpm/Dockerfile
                   platforms: linux/amd64,linux/arm64
                   push: true
                   tags: |
@@ -51,7 +51,7 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   context: .
-                  file: php/php8.2-supervisor/Dockerfile
+                  file: php/8.2-supervisor/Dockerfile
                   platforms: linux/amd64,linux/arm64
                   push: true
                   tags: |
