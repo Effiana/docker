@@ -9,11 +9,14 @@ ARG TZ=Europe/Warsaw
 
 RUN apk update
 RUN apk upgrade --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main
-RUN apk add --no-cache wget ca-certificates curl bzip2 unzip
-RUN update-ca-certificates
 
 RUN /bin/sh -c set -eux; \
     apk --update --no-cache  add \
+    wget \
+    ca-certificates  \
+    curl  \
+    bzip2 \
+    unzip \
     unzip \
     ca-certificates \
     wget \
@@ -26,17 +29,18 @@ RUN /bin/sh -c set -eux; \
     rabbitmq-c \
     libzip \
     icu \
-    autoconf \
     gnu-libiconv \
     libwebp \
     libxpm \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS
 
+RUN update-ca-certificates
+
 RUN pecl install redis igbinary iconv
 RUN docker-php-ext-enable redis igbinary
 RUN docker-php-ext-install -j$(nproc) intl pdo_mysql bcmath soap zip xml opcache mbstring curl exif mysqli sysvsem
 RUN docker-php-ext-configure pcntl --enable-pcntl
-RUN docker-php-ext-install pcntl simplexml fileinfo curl sockets
+RUN docker-php-ext-install -j$(nproc) pcntl simplexml fileinfo curl sockets
 RUN pecl install amqp apcu imagick
 RUN docker-php-ext-enable amqp apcu imagick
 
@@ -66,7 +70,7 @@ RUN set -eux \
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
-RUN if [ $PUID != 33 ] ; then apk --no-cache add shadow && usermod -u $PUID www-data && groupmod -g $GUID www-data && mkdir -p /var/www && apk del shadow; fi
+RUN if [ $PUID != 33 ] ; then apk add --no-cache shadow && usermod -u $PUID www-data && groupmod -g $GUID www-data && mkdir -p /var/www && apk del shadow; fi
 
 RUN mkdir -p /var/www
 RUN chown -R www-data:www-data /var/www

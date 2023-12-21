@@ -109,7 +109,6 @@ WORKDIR /var/www/html
 
 CMD ["php-fpm"]
 
-
 # Metadata
 LABEL org.opencontainers.image.vendor="Dominik Labudzinski" \
     org.opencontainers.image.url="https://github.com/effiana/docker-images" \
