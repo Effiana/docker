@@ -2,7 +2,7 @@ FROM php:8.2-fpm-alpine
 LABEL Maintainer="Dominik Labudzinski <dominik@labudzinski.com>" \
     Description="PHP-FPM v8.2 with essential extensions on top of Alpine Linux."
 
-ENV PHPIZE_DEPS="git make gcc g++ zlib-dev freetype-dev libjpeg-turbo-dev libpng-dev curl-dev icu-dev libxml2-dev libzip-dev oniguruma-dev imap-dev openssl-dev rabbitmq-c-dev libpng-dev libzip-dev libxslt-dev icu-dev libxml2-dev curl-dev linux-headers libwebp-dev libxpm-dev imagemagick-dev"
+ENV PHPIZE_DEPS="git autoconf make gcc g++ zlib-dev freetype-dev libjpeg-turbo-dev libpng-dev curl-dev icu-dev libxml2-dev libzip-dev oniguruma-dev imap-dev openssl-dev rabbitmq-c-dev libpng-dev libzip-dev libxslt-dev icu-dev libxml2-dev curl-dev linux-headers libwebp-dev libxpm-dev imagemagick-dev"
 ARG PUID=82
 ARG GUID=82
 ARG TZ=Europe/Warsaw
