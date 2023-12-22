@@ -32,6 +32,7 @@ RUN /bin/sh -c set -eux; \
     gnu-libiconv \
     libwebp \
     libxpm \
+    libjpeg \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS
 
 RUN update-ca-certificates
