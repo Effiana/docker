@@ -35,7 +35,7 @@ jobs:
                   registry: docker.io
                   image: effiana/php8.2-fpm
                   directory: .
-                  dockerfile: php/8.2-fpm/Dockerfile
+                  file: php/8.2-fpm/Dockerfile
                   platforms: linux/amd64,linux/arm64
                   enableBuildKit: true
                   multiPlatform: true
@@ -47,13 +47,14 @@ jobs:
                   outputs: type=oci,dest=/tmp/php-8.2-fpm.tar
                   tags: |
                     effiana/php-8.2-fpm:${{needs.gettag.outputs.uuid}}
+                    effiana/php-8.2-fpm:latest
             - name: Build and push
               uses: docker/build-push-action@v5
               with:
                 registry: docker.io
                 image: effiana/php8.2-supervisor
                 directory: .
-                dockerfile: php/8.2-fpm/Dockerfile
+                file: php/8.2-fpm/Dockerfile
                 platforms: linux/amd64,linux/arm64
                 enableBuildKit: true
                 multiPlatform: true
@@ -65,3 +66,4 @@ jobs:
                 outputs: type=oci,dest=/tmp/php-8.2-supervisor.tar
                 tags: |
                   effiana/php-8.2-supervisor:${{needs.gettag.outputs.uuid}}
+                  effiana/php-8.2-supervisor:latest
