@@ -20,6 +20,11 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
+            # https://github.com/docker/setup-qemu-action
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v1
+              with:
+                platforms: arm64
             - name: 'Login to GitHub Container Registry'
               uses: docker/login-action@v3
               with:
@@ -42,6 +47,7 @@ jobs:
                   overrideDriver: true
                   addLatest: true
                   pushImage: true
+                  push: true
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
                   outputs: type=oci,dest=/tmp/php-8.2-fpm.tar
@@ -61,6 +67,7 @@ jobs:
                 overrideDriver: true
                 addLatest: true
                 pushImage: true
+                push: true
                 cache-from: type=gha
                 cache-to: type=gha,mode=max
                 outputs: type=oci,dest=/tmp/php-8.2-supervisor.tar
