@@ -50,7 +50,6 @@ jobs:
                   push: true
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
-                  outputs: type=oci,dest=/tmp/php-8.2-fpm.tar
                   tags: |
                     effiana/php-8.2-fpm:${{needs.gettag.outputs.uuid}}
                     effiana/php-8.2-fpm:latest
@@ -70,7 +69,6 @@ jobs:
                 push: true
                 cache-from: type=gha
                 cache-to: type=gha,mode=max
-                outputs: type=oci,dest=/tmp/php-8.2-supervisor.tar
                 tags: |
                   effiana/php-8.2-supervisor:${{needs.gettag.outputs.uuid}}
                   effiana/php-8.2-supervisor:latest
