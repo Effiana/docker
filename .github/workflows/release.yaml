@@ -30,7 +30,7 @@ jobs:
               with:
                 driver-opts: image=moby/buildkit:latest
             - name: Build and push
-              uses: docker/build-push-action@v6
+              uses: docker/build-push-action@v5
               with:
                   registry: docker.io
                   image: effiana/php8.2-fpm
