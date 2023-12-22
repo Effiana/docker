@@ -10,7 +10,6 @@ RUN apk add --no-cache  \
     bash  \
     ffmpeg  \
     ghostscript  \
-    jpegoptim  \
     libstdc++ \
     libx11 \
     libxrender \

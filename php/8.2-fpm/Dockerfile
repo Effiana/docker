@@ -33,6 +33,9 @@ RUN /bin/sh -c set -eux; \
     libwebp \
     libxpm \
     libjpeg \
+    jpegoptim  \
+    optipng \
+    pngquant \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS
 
 RUN update-ca-certificates
