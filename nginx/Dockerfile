@@ -1,5 +1,8 @@
 FROM nginx:mainline-alpine-slim
 
+LABEL Maintainer="Dominik Labudzinski <dominik@labudzinski.com>" \
+    Description="Nginx with essential extensions on top of Alpine Linux."
+
 ARG PUID=82
 ARG GUID=82
 ARG TZ=Europe/Warsaw

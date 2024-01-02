@@ -36,6 +36,7 @@ RUN /bin/sh -c set -eux; \
     jpegoptim  \
     optipng \
     pngquant \
+    exiftool \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS
 
 RUN update-ca-certificates

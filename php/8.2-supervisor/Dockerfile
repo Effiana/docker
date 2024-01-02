@@ -21,6 +21,7 @@ RUN apk add --no-cache  \
     ttf-freefont \
     ttf-liberation \
     supervisor \
+    exiftool \
     && rm -rf /tmp/* /var/cache/apk/*
 
 COPY --from=wkhtmltopdf /bin/wkhtmltopdf /bin/libwkhtmltox.so /bin/
