@@ -44,7 +44,7 @@ RUN apk update \
     &&  docker-php-ext-install -j$(nproc) xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl exif mysqli sysvsem \
     && docker-php-ext-configure pcntl --enable-pcntl \
     && docker-php-ext-install -j$(nproc) pcntl simplexml fileinfo curl sockets \
-    && pecl install amqp apcu imagick] \
+    && pecl install amqp apcu imagick \
     && docker-php-ext-enable xsl amqp apcu imagick \
     && ln -s /usr/lib/$(apk --print-arch)-linux-gnu/libXpm.* /usr/lib/ \
     && docker-php-ext-configure gd \
