@@ -40,12 +40,12 @@ RUN apk update \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && update-ca-certificates \
     && pecl install redis igbinary iconv \
-    && docker-php-ext-install -j$(nproc) xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl exif mysqli sysvsem \
+    && docker-php-ext-enable redis igbinary \
+    &&  docker-php-ext-install -j$(nproc) xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl exif mysqli sysvsem \
     && docker-php-ext-configure pcntl --enable-pcntl \
     && docker-php-ext-install -j$(nproc) pcntl simplexml fileinfo curl sockets \
     && pecl install amqp apcu imagick] \
     && docker-php-ext-enable xsl amqp apcu imagick \
-    && docker-php-ext-enable redis igbinary iconv \
     && ln -s /usr/lib/$(apk --print-arch)-linux-gnu/libXpm.* /usr/lib/ \
     && docker-php-ext-configure gd \
         --enable-gd \
