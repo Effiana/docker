@@ -73,7 +73,7 @@ RUN apk update \
     && apk del .build-deps $PHPIZE_DEPS \
     && true
 
-COPY php/8.s-fpm/php.ini /usr/local/etc/php/php.ini
+COPY php/8.2-fpm/php.ini /usr/local/etc/php/php.ini
 
 EXPOSE 9000
 USER www-data
