@@ -41,7 +41,7 @@ RUN apk update \
     && update-ca-certificates \
     && pecl install redis igbinary iconv \
     && docker-php-ext-enable redis igbinary \
-    &&  docker-php-ext-install -j$(nproc) xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl exif mysqli sysvsem \
+    && docker-php-ext-install -j$(nproc) xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl exif mysqli sysvsem sysvmsg sysvshm \
     && docker-php-ext-configure pcntl --enable-pcntl \
     && docker-php-ext-install -j$(nproc) pcntl simplexml fileinfo curl sockets \
     && pecl install amqp apcu imagick \
@@ -71,20 +71,14 @@ RUN apk update \
     && rm -rf /tmp/* \
     && rm -rf /var/cache/apk/* \
     && apk del .build-deps $PHPIZE_DEPS \
+    && echo 'memory_limit = 512M' > /usr/local/etc/php/conf.d/docker-php-memlimit.ini \
+    && echo 'upload_max_filesize = 256M' > /usr/local/etc/php/conf.d/docker-php-uploadlimit.ini \
+    && echo 'output_buffering = off' > /usr/local/etc/php/conf.d/docker-php-output_buffering.ini \
+    && echo 'max_input_time = 300' > /usr/local/etc/php/conf.d/docker-php-max_input_time.ini \
+    && echo 'max_execution_time = 300' > /usr/local/etc/php/conf.d/docker-php-max_execution_time.ini \
+    && echo 'post_max_size = 256M' > /usr/local/etc/php/conf.d/docker-php-postlimit.ini \
+    && mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
     && true
 
-COPY php/8.2-fpm/php.ini /usr/local/etc/php/php.ini
-
-EXPOSE 9000
 USER www-data
 WORKDIR /var/www/html
-
-CMD ["php-fpm"]
-
-# Metadata
-LABEL org.opencontainers.image.vendor="Dominik Labudzinski" \
-    org.opencontainers.image.url="https://github.com/effiana/docker-images" \
-    org.opencontainers.image.title="PHP-FPM v8.2 Alpine" \
-    org.opencontainers.image.description="PHP-FPM v8.2 with essential extensions on top of Alpine Linux." \
-    org.opencontainers.image.version="8.2" \
-    org.opencontainers.image.documentation="https://github.com/effiana/docker-images"

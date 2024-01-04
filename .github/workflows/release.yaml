@@ -34,7 +34,26 @@ jobs:
               uses: docker/setup-buildx-action@v3
               with:
                 driver-opts: image=moby/buildkit:latest
-            - name: Build and push
+            - name: Build and push NGINX
+              uses: docker/build-push-action@v5
+              with:
+                  registry: docker.io
+                  image: effiana/nginx
+                  directory: .
+                  file: nginx/Dockerfile
+                  platforms: linux/amd64,linux/arm64
+                  enableBuildKit: true
+                  multiPlatform: true
+                  overrideDriver: true
+                  addLatest: true
+                  pushImage: true
+                  push: true
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+                  tags: |
+                    effiana/nginx:${{needs.gettag.outputs.uuid}}
+                    effiana/nginx:latest
+            - name: Build and push PHP-8.2
               uses: docker/build-push-action@v5
               with:
                   registry: docker.io
@@ -53,7 +72,7 @@ jobs:
                   tags: |
                     effiana/php-8.2-fpm:${{needs.gettag.outputs.uuid}}
                     effiana/php-8.2-fpm:latest
-            - name: Build and push
+            - name: Build and push PHP with Supervisord
               uses: docker/build-push-action@v5
               with:
                 registry: docker.io
