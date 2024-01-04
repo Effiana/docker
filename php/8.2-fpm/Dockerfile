@@ -7,10 +7,9 @@ ARG PUID=82
 ARG GUID=82
 ARG TZ=Europe/Warsaw
 
-RUN apk update
-RUN apk upgrade --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main
-
-RUN /bin/sh -c set -eux; \
+RUN apk update \
+    && apk upgrade --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main \
+    && /bin/sh -c set -eux; \
     apk --update --no-cache  add \
     wget \
     ca-certificates  \
@@ -37,20 +36,17 @@ RUN /bin/sh -c set -eux; \
     optipng \
     pngquant \
     exiftool \
-    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS
-
-RUN update-ca-certificates
-
-RUN pecl install redis igbinary iconv
-RUN docker-php-ext-enable redis igbinary
-RUN docker-php-ext-install -j$(nproc) intl pdo_mysql bcmath soap zip xml opcache mbstring curl exif mysqli sysvsem
-RUN docker-php-ext-configure pcntl --enable-pcntl
-RUN docker-php-ext-install -j$(nproc) pcntl simplexml fileinfo curl sockets
-RUN pecl install amqp apcu imagick
-RUN docker-php-ext-enable amqp apcu imagick
-
-# Install gd
-RUN ln -s /usr/lib/$(apk --print-arch)-linux-gnu/libXpm.* /usr/lib/ \
+    libxslt \
+    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+    && update-ca-certificates \
+    && pecl install redis igbinary iconv \
+    && docker-php-ext-install -j$(nproc) xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl exif mysqli sysvsem \
+    && docker-php-ext-configure pcntl --enable-pcntl \
+    && docker-php-ext-install -j$(nproc) pcntl simplexml fileinfo curl sockets \
+    && pecl install amqp apcu imagick] \
+    && docker-php-ext-enable xsl amqp apcu imagick \
+    && docker-php-ext-enable redis igbinary iconv \
+    && ln -s /usr/lib/$(apk --print-arch)-linux-gnu/libXpm.* /usr/lib/ \
     && docker-php-ext-configure gd \
         --enable-gd \
         --with-webp \
@@ -59,31 +55,26 @@ RUN ln -s /usr/lib/$(apk --print-arch)-linux-gnu/libXpm.* /usr/lib/ \
         --with-freetype \
         --enable-gd-jis-conv \
     && docker-php-ext-install -j$(nproc) gd \
-    && true
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-RUN set -eux \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && set -eux \
     # Fix php.ini settings for enabled extensions
     && chmod +x "$(php -r 'echo ini_get("extension_dir");')"/* \
     # Shrink binaries
     && (find /usr/local/bin -type f -print0 | xargs -n1 -0 strip --strip-all -p 2>/dev/null || true) \
     && (find /usr/local/lib -type f -print0 | xargs -n1 -0 strip --strip-all -p 2>/dev/null || true) \
     && (find /usr/local/sbin -type f -print0 | xargs -n1 -0 strip --strip-all -p 2>/dev/null || true) \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone \
+    && if [ $PUID != 33 ] ; then apk add --no-cache shadow && usermod -u $PUID www-data && groupmod -g $GUID www-data && mkdir -p /var/www && apk del shadow; fi \
+    && mkdir -p /var/www \
+    && chown -R www-data:www-data /var/www \
+    && rm -rf /tmp/* \
+    && rm -rf /var/cache/apk/* \
+    && apk del .build-deps $PHPIZE_DEPS \
     && true
 
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
-    && echo $TZ > /etc/timezone
+COPY php/8.s-fpm/php.ini /usr/local/etc/php/php.ini
 
-RUN if [ $PUID != 33 ] ; then apk add --no-cache shadow && usermod -u $PUID www-data && groupmod -g $GUID www-data && mkdir -p /var/www && apk del shadow; fi
-
-RUN mkdir -p /var/www
-RUN chown -R www-data:www-data /var/www
-
-RUN rm -rf /tmp/* \
-    && rm -rf /var/cache/apk/*
-
-RUN apk del .build-deps $PHPIZE_DEPS
 EXPOSE 9000
 USER www-data
 WORKDIR /var/www/html
