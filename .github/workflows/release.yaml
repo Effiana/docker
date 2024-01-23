@@ -78,7 +78,7 @@ jobs:
                 registry: docker.io
                 image: effiana/php8.2-supervisor
                 directory: .
-                file: php/8.2-fpm/Dockerfile
+                file: php/8.2-supervisor/Dockerfile
                 platforms: linux/amd64,linux/arm64
                 enableBuildKit: true
                 multiPlatform: true
