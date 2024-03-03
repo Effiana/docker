@@ -25,6 +25,7 @@ RUN apk update \
     gettext \
     libintl \
     imagemagick \
+    imagemagick-libs \
     rabbitmq-c \
     libzip \
     icu \
@@ -37,25 +38,16 @@ RUN apk update \
     pngquant \
     exiftool \
     libxslt \
+    tiff \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && update-ca-certificates \
-    && pecl install redis igbinary iconv \
-    && docker-php-ext-enable redis igbinary \
-    && docker-php-ext-install -j$(nproc) xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl exif mysqli sysvsem sysvmsg sysvshm \
-    && docker-php-ext-configure pcntl --enable-pcntl \
-    && docker-php-ext-install -j$(nproc) pcntl simplexml fileinfo curl sockets \
-    && pecl install amqp apcu imagick \
-    && docker-php-ext-enable xsl amqp apcu imagick \
+    && curl -sSLf \
+               -o /usr/local/bin/install-php-extensions \
+               https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+    && chmod +x /usr/local/bin/install-php-extensions \
+    && install-php-extensions @fix_letsencrypt @composer imagick xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl  \
+    exif mysqli sysvsem sysvmsg sysvshm pcntl simplexml fileinfo curl sockets gd xsl amqp apcu \
     && ln -s /usr/lib/$(apk --print-arch)-linux-gnu/libXpm.* /usr/lib/ \
-    && docker-php-ext-configure gd \
-        --enable-gd \
-        --with-webp \
-        --with-jpeg \
-        --with-xpm \
-        --with-freetype \
-        --enable-gd-jis-conv \
-    && docker-php-ext-install -j$(nproc) gd \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && set -eux \
     # Fix php.ini settings for enabled extensions
     && chmod +x "$(php -r 'echo ini_get("extension_dir");')"/* \

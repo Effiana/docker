@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-alpine
 LABEL Maintainer="Dominik Labudzinski <dominik@labudzinski.com>" \
     Description="PHP-FPM v8.2 with essential extensions on top of Alpine Linux."
 
@@ -39,6 +39,7 @@ RUN apk update \
     exiftool \
     libxslt \
     tiff \
+    jq \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && update-ca-certificates \
     && pecl install redis igbinary iconv \
@@ -82,5 +83,18 @@ RUN apk update \
     && mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
     && true
 
-USER www-data
 WORKDIR /var/www/html
+RUN wget -O/usr/local/bin/frankenphp $(wget -O- https://api.github.com/repos/dunglas/frankenphp/releases/latest | jq '.assets[] | select(.name=="frankenphp-linux-x86_64") | .browser_download_url' -r) && chmod +x /usr/local/bin/frankenphp
+
+ENV APP_RUNTIME="Runtime\FrankenPhpSymfony\Runtime"
+ENV APP_PUBLIC_PATH="/var/www/html/public"
+ENV MAX_REQUESTS="500"
+ENV REQUEST_MAX_EXECUTION_TIME="500"
+ENV CADDY_SERVER_ADMIN_PORT="3823"
+ENV CADDY_SERVER_LOG_LEVEL="WARN"
+ENV CADDY_SERVER_LOGGER="json"
+ENV CADDY_SERVER_SERVER_NAME="http://:80"
+ENV CADDY_SERVER_WORKER_COUNT="16"
+ENV CADDY_SERVER_EXTRA_DIRECTIVES=""
+
+ENTRYPOINT ["frankenphp","run", "-cCaddyfile"]
