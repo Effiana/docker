@@ -34,13 +34,13 @@ jobs:
               uses: docker/setup-buildx-action@v3
               with:
                 driver-opts: image=moby/buildkit:latest
-            - name: Build and push NGINX
+            - name: Build and push PHP-8.3
               uses: docker/build-push-action@v5
               with:
                   registry: docker.io
-                  image: effiana/nginx
+                  image: effiana/php8.3-fpm
                   directory: .
-                  file: nginx/Dockerfile
+                  file: php/8.3-fpm/Dockerfile
                   platforms: linux/amd64,linux/arm64
                   enableBuildKit: true
                   multiPlatform: true
@@ -51,34 +51,15 @@ jobs:
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
                   tags: |
-                    effiana/nginx:${{needs.gettag.outputs.uuid}}
-                    effiana/nginx:latest
-            - name: Build and push PHP-8.2
-              uses: docker/build-push-action@v5
-              with:
-                  registry: docker.io
-                  image: effiana/php8.2-fpm
-                  directory: .
-                  file: php/8.2-fpm/Dockerfile
-                  platforms: linux/amd64,linux/arm64
-                  enableBuildKit: true
-                  multiPlatform: true
-                  overrideDriver: true
-                  addLatest: true
-                  pushImage: true
-                  push: true
-                  cache-from: type=gha
-                  cache-to: type=gha,mode=max
-                  tags: |
-                    effiana/php-8.2-fpm:${{needs.gettag.outputs.uuid}}
-                    effiana/php-8.2-fpm:latest
+                    effiana/php-8.3-fpm:${{needs.gettag.outputs.uuid}}
+                    effiana/php-8.3-fpm:latest
             - name: Build and push PHP with Supervisord
               uses: docker/build-push-action@v5
               with:
                 registry: docker.io
-                image: effiana/php8.2-supervisor
+                image: effiana/php8.3-supervisor
                 directory: .
-                file: php/8.2-supervisor/Dockerfile
+                file: php/8.3-supervisor/Dockerfile
                 platforms: linux/amd64,linux/arm64
                 enableBuildKit: true
                 multiPlatform: true
@@ -89,5 +70,5 @@ jobs:
                 cache-from: type=gha
                 cache-to: type=gha,mode=max
                 tags: |
-                  effiana/php-8.2-supervisor:${{needs.gettag.outputs.uuid}}
-                  effiana/php-8.2-supervisor:latest
+                  effiana/php-8.3-supervisor:${{needs.gettag.outputs.uuid}}
+                  effiana/php-8.3-supervisor:latest

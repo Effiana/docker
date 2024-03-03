@@ -45,7 +45,7 @@ RUN apk update \
                -o /usr/local/bin/install-php-extensions \
                https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
-    && install-php-extensions @fix_letsencrypt @composer imagick/imagick@master xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl  \
+    && install-php-extensions @fix_letsencrypt @composer redis igbinary imagick/imagick@master xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl  \
     exif mysqli sysvsem sysvmsg sysvshm pcntl simplexml fileinfo curl sockets gd xsl amqp apcu \
     && ln -s /usr/lib/$(apk --print-arch)-linux-gnu/libXpm.* /usr/lib/ \
     && set -eux \
