@@ -64,7 +64,6 @@ RUN apk update \
     && rm -rf /var/cache/apk/* \
     && apk del .build-deps $PHPIZE_DEPS \
     && echo 'memory_limit = 512M' > /usr/local/etc/php/conf.d/docker-php-memlimit.ini \
-    && echo 'allow_url_fopen = 0' > /usr/local/etc/php/conf.d/docker-php-allow_url_fopen.ini \
     && echo 'upload_max_filesize = 256M' > /usr/local/etc/php/conf.d/docker-php-uploadlimit.ini \
     && echo 'output_buffering = off' > /usr/local/etc/php/conf.d/docker-php-output_buffering.ini \
     && echo 'max_input_time = 300' > /usr/local/etc/php/conf.d/docker-php-max_input_time.ini \
