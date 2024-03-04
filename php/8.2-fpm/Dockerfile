@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-fpm-alpine as php-fpm
 LABEL Maintainer="Dominik Labudzinski <dominik@labudzinski.com>" \
     Description="PHP-FPM v8.2 with essential extensions on top of Alpine Linux."
 
