@@ -32,5 +32,6 @@ COPY --from=wkhtmltopdf /bin/wkhtmltopdf /bin/libwkhtmltox.so /bin/
 COPY ./php/8.3-supervisor/supervisord.conf /etc/supervisord.conf
 RUN chown www-data:www-data /etc/supervisord.conf
 
+USER www-data
 ENTRYPOINT ["docker-php-entrypoint"]
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]

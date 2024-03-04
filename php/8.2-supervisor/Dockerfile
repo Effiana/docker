@@ -33,5 +33,6 @@ RUN mkdir -p /var/www  \
 COPY ./php/8.2-supervisor/supervisord.conf /etc/supervisord.conf
 RUN chown www-data:www-data /etc/supervisord.conf
 
+USER www-data
 ENTRYPOINT ["docker-php-entrypoint"]
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]
