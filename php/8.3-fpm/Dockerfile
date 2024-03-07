@@ -7,8 +7,9 @@ ARG PUID=82
 ARG GUID=82
 ARG TZ=Europe/Warsaw
 
-RUN apk update \
-    && apk upgrade --available \
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main\https://dl-cdn.alpinelinux.org/alpine/v3.19/community" > /etc/apk/repositories \
+    && apk update \
+    && apk upgrade \
     && /bin/sh -c set -eux; \
     apk --update --no-cache  add \
     wget \
