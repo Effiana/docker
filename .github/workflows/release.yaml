@@ -6,16 +6,7 @@ on:
       tags:
         - 'v*.*'
 jobs:
-    gettag:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Set UUID
-              id: generate-uuid
-              run: echo "uuid=${{ github.sha }}" >> $GITHUB_OUTPUT
-        outputs:
-            uuid: ${{ steps.generate-uuid.outputs.uuid }}
     build:
-        needs: [gettag]
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
@@ -51,7 +42,7 @@ jobs:
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
                   tags: |
-                    effiana/unit:${{needs.gettag.outputs.uuid}}
+                    effiana/unit:${{ github.sha }}
                     effiana/unit:php8.3
             - name: Build and push PHP with Supervisord
               uses: docker/build-push-action@v5
@@ -70,5 +61,5 @@ jobs:
                 cache-from: type=gha
                 cache-to: type=gha,mode=max
                 tags: |
-                  effiana/php-8.2-supervisor:${{needs.gettag.outputs.uuid}}
+                  effiana/php-8.2-supervisor:${{ github.sha }}
                   effiana/php-8.2-supervisor:latest
