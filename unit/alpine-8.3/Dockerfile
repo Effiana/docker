@@ -50,12 +50,41 @@ RUN set -ex \
     && ./configure php \
     && make -j $NCPU php-install \
     && cd \
-    && rm -rf /usr/src/unit
-
-RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" > /etc/apk/repositories \
+    && rm -rf /usr/src/unit \
+    && echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" > /etc/apk/repositories \
     && echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk update \
     && apk upgrade --available \
+    && apk --update --no-cache  add \
+        wget \
+        ca-certificates  \
+        curl  \
+        bzip2 \
+        unzip \
+        unzip \
+        ca-certificates \
+        wget \
+        procps \
+        shadow \
+        openssh \
+        gettext \
+        libintl \
+        imagemagick \
+        imagemagick-libs \
+        rabbitmq-c \
+        libzip \
+        icu \
+        gnu-libiconv \
+        libwebp \
+        libxpm \
+        libjpeg \
+        jpegoptim  \
+        optipng \
+        pngquant \
+        exiftool \
+        libxslt \
+        tiff \
+    && update-ca-certificates \
     && apk add --no-cache --update \
         tini ca-certificates curl pcre2 musl openssl shadow php83-embed \
     && mkdir -p /var/lib/unit/ \
