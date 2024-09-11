@@ -5,13 +5,17 @@ LABEL Maintainer="Dominik Labudzinski <dominik@labudzinski.com>" \
 ARG PUID=1001
 ARG GUID=1001
 ARG TZ=Europe/Warsaw
-RUN apt update && apt upgrade -y && apt install vim -y  \
+RUN sed -i 's/bullseye/bookworm/g' /etc/apt/sources.list \
+    && apt update  \
+    && apt-mark hold usrmerge \
+    && apt-mark hold usr-is-merged \
+    && apt upgrade --without-new-pkgs -y && apt full-upgrade -y && apt dist-upgrade -y && apt install vim -y  \
     && curl -sSLf \
        -o /usr/local/bin/install-php-extensions \
        https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
-    && install-php-extensions @fix_letsencrypt @composer redis igbinary imagick/imagick@master xsl intl pdo_mysql bcmath zip xml opcache mbstring curl  \
-           exif mysqli sysvsem sysvmsg sysvshm pcntl simplexml fileinfo curl sockets gd xsl amqp apcu \
+    && install-php-extensions amqp apcu csv @composer decimal lz4 uuid redis igbinary imagick/imagick@master xsl intl pdo_mysql bcmath zip xml opcache mbstring curl  \
+           exif sysvsem sysvmsg sysvshm pcntl simplexml fileinfo sockets gd pgsql pdo_pgsql \
     && set -eux \
     # Fix php.ini settings for enabled extensions
     && chmod +x "$(php -r 'echo ini_get("extension_dir");')"/* \
