@@ -1,7 +1,9 @@
 ARG ALPINE_VERSION=3
 ARG DEBUG=0
 
-FROM php:8.3-zts-alpine as builder
+FROM php:8.4-zts-alpine as BUILDER
+ARG PHP_VERSION=84
+ARG UNIT_VERSION=1.32.1
 ARG PUID=1001
 ARG GUID=1001
 ARG TZ=Europe/Warsaw
@@ -12,7 +14,7 @@ RUN set -ex \
     && mkdir -p /usr/lib/unit/modules /usr/lib/unit/debug-modules \
     && mkdir -p /usr/src/unit \
     && cd /usr/src/unit \
-    && git clone --depth 1 -b 1.34.0-1 https://github.com/nginx/unit \
+    && git clone --depth 1 -b 1.33.0-1 https://github.com/nginx/unit \
     && cd unit \
     && NCPU="$(getconf _NPROCESSORS_ONLN)" \
     && CONFIGURE_ARGS_MODULES="--prefix=/usr \
@@ -91,7 +93,7 @@ RUN set -ex \
                -o /usr/local/bin/install-php-extensions \
                https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
-    && install-php-extensions @fix_letsencrypt @composer gmp sodium redis iconv igbinary imagick/imagick@master xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl  \
+    && install-php-extensions imagick @fix_letsencrypt @composer gmp sodium redis iconv igbinary xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl  \
     exif mysqli sysvsem sysvmsg sysvshm pcntl excimer simplexml fileinfo curl sockets gd xsl amqp apcu pgsql pdo_pgsql \
     && ln -s /usr/lib/$(apk --print-arch)-linux-gnu/libXpm.* /usr/lib/ \
     && (ln -s /usr/local/bin/php /usr/bin/php || true) \
