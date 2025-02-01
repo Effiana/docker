@@ -92,7 +92,7 @@ RUN set -ex \
                https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
     && install-php-extensions @fix_letsencrypt @composer gmp sodium redis iconv igbinary imagick/imagick@master xsl intl pdo_mysql bcmath soap zip xml opcache mbstring curl  \
-    exif mysqli sysvsem sysvmsg sysvshm pcntl excimer simplexml fileinfo curl sockets gd xsl amqp apcu pgsql pdo_pgsql \
+    exif mysqli sysvsem sysvmsg sysvshm pcntl excimer simplexml fileinfo curl sockets gd xsl amqp apcu pgsql pdo_pgsql opentelemetry \
     && ln -s /usr/lib/$(apk --print-arch)-linux-gnu/libXpm.* /usr/lib/ \
     && (ln -s /usr/local/bin/php /usr/bin/php || true) \
     && (ln -s /usr/local/bin/phar /usr/bin/phar || true) \
